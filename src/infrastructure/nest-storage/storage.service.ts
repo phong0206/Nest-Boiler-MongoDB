@@ -1,0 +1,33 @@
+import { Injectable, Inject } from '@nestjs/common';
+import { StorageOptions } from './interfaces';
+import { StorageDriver } from './interfaces';
+import { STORAGE_OPTIONS } from './constants';
+import { DriverManager } from './driverManager';
+
+@Injectable()
+export class StorageService {
+  private static diskDrivers: { [key: string]: any };
+  private static options: StorageOptions;
+  private static driverManager: DriverManager;
+
+  constructor(@Inject(STORAGE_OPTIONS) options: StorageOptions) {
+    StorageService.options = options;
+    StorageService.diskDrivers = {};
+    StorageService.driverManager = new DriverManager();
+  }
+
+  static getDriver(disk: string): StorageDriver {
+    disk = disk || this.options.default;
+    if (StorageService.diskDrivers[disk]) {
+      return StorageService.diskDrivers[disk];
+    }
+
+    const driver = StorageService.newDriver(disk);
+    StorageService.diskDrivers[disk] = driver;
+    return driver;
+  }
+
+  static newDriver(disk: string): StorageDriver {
+    return StorageService.driverManager.getDriver(disk, StorageService.options.disks[disk]);
+  }
+}

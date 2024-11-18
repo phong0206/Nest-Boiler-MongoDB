@@ -1,0 +1,6 @@
+// Queue name
+export const EMAIL_SENDING_QUEUE = 'EMAIL_SENDING_QUEUE';
+
+// Process name
+export const SEND_MAIL_SES_PROCESS = 'SEND_MAIL_SES_PROCESS';
+export const SEND_MAIL_CUSTOM_PROCESS = 'SEND_MAIL_CUSTOM_PROCESS';
